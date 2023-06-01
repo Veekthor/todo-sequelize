@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { BsFillGearFill } from 'react-icons/bs'
-import { DescContainer, StyledTodoForm, TitleContainer } from './styles/TodoForm.styled';
+import { DescContainer, StyledTodoForm } from './styles/TodoForm.styled';
 import { Button, ButtonContainer } from './styles/Button.styled';
+import TextInputField from './TextInputField';
 
 const TodoForm = ({ addTodo, todo, editState, setEditing }) => {
   const isEditMode = editState ? "Edit" : "";
@@ -32,20 +33,18 @@ const TodoForm = ({ addTodo, todo, editState, setEditing }) => {
 
   return (
     <StyledTodoForm onSubmit={handleSubmit}>
-      <TitleContainer>
-        <label htmlFor='todoTitle'>Title: </label>
-        <input
-          name="title"
-          id={`todoTitle${isEditMode}`}
-          type="text"
-          value={newTodo.title}
-          disabled={loading}
-          required
-          onChange={e => setTodo({ ...newTodo, title: e.target.value })}
-        />
-      </TitleContainer>
+      <TextInputField
+        label="Title"
+        name="title"
+        id={`todoTitle${isEditMode}`}
+        type="text"
+        value={newTodo.title}
+        disabled={loading}
+        required
+        onChange={e => setTodo({ ...newTodo, title: e.target.value })}
+      />
       <DescContainer>
-        <label htmlFor='todoDesc'>Description (optional): </label>
+        <label htmlFor={`todoDesc${isEditMode}`}>Description (optional): </label>
         <textarea
           name="description"
           id={`todoDesc${isEditMode}`}
