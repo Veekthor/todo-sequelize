@@ -1,4 +1,5 @@
 const users = require("./user.routes");
+const error = require("../middlewares/error");
 const express = require("express");
 module.exports = function(app) {
   app.use(express.json());
@@ -10,4 +11,5 @@ module.exports = function(app) {
       health: "OK",
     });
   })
+  app.use(error)
 }
