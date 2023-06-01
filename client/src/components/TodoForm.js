@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { BsFillGearFill } from 'react-icons/bs'
-import { Button, DescContainer, StyledTodoForm, TitleContainer } from './styles/TodoForm.styled';
+import { DescContainer, StyledTodoForm, TitleContainer } from './styles/TodoForm.styled';
+import { Button, ButtonContainer } from './styles/Button.styled';
 
-const TodoForm = ({ addTodo }) => {
-  const [todo, setTodo] = useState({
+const TodoForm = ({ addTodo, todo, editState, setEditing }) => {
+  const isEditMode = editState ? "Edit" : "";
+  const [newTodo, setTodo] = useState(() => todo || {
     id: "",
     title: "",
     description: "",
@@ -14,15 +16,19 @@ const TodoForm = ({ addTodo }) => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    if (todo.title.trim()) {
+    if (newTodo.title.trim()) {
       setLoading(true);
       setTimeout(() => {
-        addTodo({ ...todo, id: Date.now() });
-        setTodo({ ...todo, title: "", description: "" });
+        const newTodoObj = {...newTodo}
+        if(!editState) newTodoObj.id = Date.now();
+        addTodo(newTodoObj);
+        setTodo({ ...newTodo, title: "", description: "" });
         setLoading(false);
       }, 3000);
     }
   };
+
+  const submitBtnVal = editState ? "Save" : "Add Todo";
 
   return (
     <StyledTodoForm onSubmit={handleSubmit}>
@@ -30,25 +36,28 @@ const TodoForm = ({ addTodo }) => {
         <label htmlFor='todoTitle'>Title: </label>
         <input
           name="title"
-          id="todoTitle"
+          id={`todoTitle${isEditMode}`}
           type="text"
-          value={todo.title}
+          value={newTodo.title}
           disabled={loading}
           required
-          onChange={e => setTodo({ ...todo, title: e.target.value })}
+          onChange={e => setTodo({ ...newTodo, title: e.target.value })}
         />
       </TitleContainer>
       <DescContainer>
         <label htmlFor='todoDesc'>Description (optional): </label>
         <textarea
           name="description"
-          id="todoDesc"
-          value={todo.description}
+          id={`todoDesc${isEditMode}`}
+          value={newTodo.description}
           disabled={loading}
-          onChange={e => setTodo({ ...todo, description: e.target.value })}
+          onChange={e => setTodo({ ...newTodo, description: e.target.value })}
         />
       </DescContainer>
-      <Button type="submit" disabled={loading}>{loading ? (<BsFillGearFill className="rotate" />) : "Add Todo"}</Button>
+      <ButtonContainer>
+        {editState && <Button onClick={() => setEditing(false)}>Cancel</Button>}
+        <Button type="submit" disabled={loading}>{loading ? (<BsFillGearFill className="rotate" />) : submitBtnVal}</Button>
+      </ButtonContainer>
     </StyledTodoForm>
   );
 }
