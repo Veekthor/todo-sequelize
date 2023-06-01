@@ -1,28 +1,13 @@
-import {useEffect, useState} from "react";
+import TodoPage from "./components/TodoPage";
+import { Container } from "./components/styles/Container.style";
+import { GlobalStyles } from "./components/styles/Global";
+
 function App() {
-  const [data, setData] = useState(null)
-  useEffect(() => {
-    const initCall = async () => {
-      try {
-        const res = await fetch("/api");
-        const data = await res.json();
-        setData(data);
-      } catch (error) {
-        alert("Something went wrong");
-        console.error(error);
-      }
-    }
-    initCall();
-  }, [])
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Hi mom</h1>
-      </header>
-      <p>
-        Health: {data?.health}
-      </p>
-    </div>
+    <Container>
+      <GlobalStyles />
+      <TodoPage />
+    </Container>
   );
 }
 
