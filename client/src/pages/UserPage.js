@@ -4,6 +4,7 @@ import { Button, ButtonContainer } from "../components/styles/Button.styled";
 import { authContext } from "../context";
 import { Link, useNavigate } from "react-router-dom";
 import { BsFillGearFill } from "react-icons/bs";
+import { apiCall } from "../api";
 
 const UserPage = ({ isSignUp }) => {
   const [userName, setUserName] = useState("");
@@ -18,14 +19,22 @@ const UserPage = ({ isSignUp }) => {
     if (name === "password") setPassword(value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
+    const path = isSignUp ? "/users/signup" : "/users/signin";
+    const {data, error} = await apiCall({path, method: "POST", body: {
+      username: userName,
+      password,
+    }});
+    setLoading(false);
+    if(data) {
       navigate("/");
-      setUser(userName);
-    }, 2000);
+      console.log("Token: ", data.token)
+      localStorage.setItem("token", data.token)
+      setUser(data.token);
+    }
+    if(error) console.log("Error Msg: ", error.message);
   };
 
   const submitBtnVal = isSignUp ? "Sign Up" : "Log In";
