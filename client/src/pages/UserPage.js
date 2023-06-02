@@ -5,6 +5,7 @@ import { authContext } from "../context";
 import { Link, useNavigate } from "react-router-dom";
 import { BsFillGearFill } from "react-icons/bs";
 import { apiCall } from "../api";
+import { parseJwt } from "../utils";
 
 const UserPage = ({ isSignUp }) => {
   const [userName, setUserName] = useState("");
@@ -32,7 +33,7 @@ const UserPage = ({ isSignUp }) => {
       navigate("/");
       console.log("Token: ", data.token)
       localStorage.setItem("token", data.token)
-      setUser(data.token);
+      setUser(parseJwt(data.token));
     }
     if(error) console.log("Error Msg: ", error.message);
   };

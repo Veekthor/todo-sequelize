@@ -9,20 +9,21 @@ function TodoItem({ todo, toggleComplete, editTodo, deleteTodo, idx }) {
 
   const handleToggleComplete = () => {
     setLoading("toggleComplete");
-    toggleComplete(todo.id, () => setLoading(""));
+    toggleComplete(todo.id, todo.completed, () => setLoading(""));
   };
 
-  const handleSave = (latestTodo) => {
-    editTodo(todo.id, latestTodo);
-    setEditing(false);
+  const handleSave = (latestTodo, cb) => {
+    editTodo(todo.id, latestTodo, (wasSuccessful) => {
+      if(cb) cb();
+      if(wasSuccessful) setEditing(false);
+    });
   };
 
   const handleDelete = () => {
     setLoading("delete");
-    setTimeout(() => {
-      deleteTodo(todo.id);
+    deleteTodo(todo.id, () => {
       setLoading("");
-    }, 3000);
+    });
   };
 
   return (

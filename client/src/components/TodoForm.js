@@ -19,13 +19,11 @@ const TodoForm = ({ addTodo, todo, editState, setEditing }) => {
     e.preventDefault();
     if (newTodo.title.trim()) {
       setLoading(true);
-      setTimeout(() => {
-        const newTodoObj = {...newTodo}
-        if(!editState) newTodoObj.id = Date.now();
-        addTodo(newTodoObj);
-        setTodo({ ...newTodo, title: "", description: "" });
+      const newTodoObj = {...newTodo}
+      addTodo(newTodoObj, (wasSuccessful = false) => {
         setLoading(false);
-      }, 3000);
+        if(wasSuccessful) setTodo({ ...newTodo, title: "", description: "" });
+      });
     }
   };
 
