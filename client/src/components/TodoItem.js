@@ -14,8 +14,8 @@ function TodoItem({ todo, toggleComplete, editTodo, deleteTodo, idx }) {
 
   const handleSave = (latestTodo, cb) => {
     editTodo(todo.id, latestTodo, (wasSuccessful) => {
-      if(cb) cb();
-      if(wasSuccessful) setEditing(false);
+      if (cb) cb();
+      if (wasSuccessful) setEditing(false);
     });
   };
 

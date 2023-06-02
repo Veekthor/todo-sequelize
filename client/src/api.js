@@ -17,17 +17,14 @@ export const apiCall = async ({
   if (body) options.body = JSON.stringify(body || {});
   const returnObj = { data: null, error: null };
 
-  console.log(body, "meeee")
   try {
     const request = await fetch(baseUrl + path, options);
     const data = await request.json();
-    console.log("Stuff", data)
-    if(request.ok){
+    if (request.ok) {
       returnObj.data = data;
     } else {
-      returnObj.error = data
+      returnObj.error = data;
     }
-    
   } catch (error) {
     console.error(error);
     returnObj.error = error;
@@ -46,6 +43,6 @@ export const authApiCall = async ({
   headers = {
     "x-access-token": localStorage.getItem("token"),
     ...headers,
-  }
-  return await apiCall({path, method, body, otherOptions, headers});
-}
+  };
+  return await apiCall({ path, method, body, otherOptions, headers });
+};

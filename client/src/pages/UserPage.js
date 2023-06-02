@@ -25,23 +25,27 @@ const UserPage = ({ isSignUp }) => {
     e.preventDefault();
     setLoading(true);
     const path = isSignUp ? "/users/signup" : "/users/signin";
-    const {data, error} = await apiCall({path, method: "POST", body: {
-      username: userName,
-      password,
-    }});
+    const { data, error } = await apiCall({
+      path,
+      method: "POST",
+      body: {
+        username: userName,
+        password,
+      },
+    });
     setLoading(false);
-    toast.warn("Loading!")
-    if(data) {
+    toast.warn("Loading!");
+    if (data) {
       toast.success(data.message);
       navigate("/");
-      console.log("Token: ", data.token)
-      localStorage.setItem("token", data.token)
+      console.log("Token: ", data.token);
+      localStorage.setItem("token", data.token);
       setUser(parseJwt(data.token));
     }
-    if(error) {
+    if (error) {
       toast.error(error.message || "Something Went Wrong!");
-      console.log("Error Msg: ", error.message)
-    };
+      console.log("Error Msg: ", error.message);
+    }
   };
 
   const submitBtnVal = isSignUp ? "Sign Up" : "Log In";
