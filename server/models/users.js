@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../db");
 
-const User = sequelize.define('User', {
+const User = sequelize.define("User", {
   username: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -9,13 +9,13 @@ const User = sequelize.define('User', {
   password: {
     type: DataTypes.STRING,
     allowNull: false,
-  }
+  },
 });
 
-User.associate = models => {
+User.associate = (models) => {
   User.hasMany(models.Todo, {
-    foreignKey: 'userId',
-    as: 'todos'
+    foreignKey: "userId",
+    as: "todos",
   });
 };
 

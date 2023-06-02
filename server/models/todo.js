@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../db");
 
-const Todo = sequelize.define('Todo', {
+const Todo = sequelize.define("Todo", {
   title: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -24,10 +24,10 @@ const Todo = sequelize.define('Todo', {
   },
 });
 
-Todo.associate = models => {
+Todo.associate = (models) => {
   Todo.belongsTo(models.User, {
-    foreignKey: 'userId',
-    onDelete: 'CASCADE'
+    foreignKey: "userId",
+    onDelete: "CASCADE",
   });
 };
 

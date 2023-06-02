@@ -2,13 +2,13 @@ const { Todo } = require("../models/todo");
 // GET all Todos of a user
 const findAllTasks = (req, res) => {
   Todo.findAll({ where: { userId: req.userId, archived: false } })
-    .then(todos => {
+    .then((todos) => {
       const msg = todos.length === 0 ? "No Tasks Found" : "Success";
-      res.send({todos, message: msg});
+      res.send({ todos, message: msg });
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
-        message: err.message || "Some error occurred while retrieving todos."
+        message: err.message || "Some error occurred while retrieving todos.",
       });
     });
 };
@@ -18,13 +18,13 @@ const findOneTask = (req, res) => {
   const id = req.params.id;
 
   Todo.findOne({
-    where: { id: id, userId: req.userId, archived: false }
+    where: { id: id, userId: req.userId, archived: false },
   })
-    .then(todo => {
+    .then((todo) => {
       if (todo) res.send(todo);
       else res.status(404).send({ message: "Not found Task with id " + id });
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({ message: "Error retrieving Task with id=" + id });
     });
 };
@@ -38,42 +38,45 @@ const createTask = (req, res) => {
   const todo = {
     title: req.body.title,
     description: req.body.description,
-    userId: req.userId
+    userId: req.userId,
   };
 
   Todo.create(todo)
-  .then(data => {
-    res.send({data, message: "Task Created Successfully!"});
-  })
-  .catch(err => {
-    res.status(500).send({ message: err.message });
-  });
+    .then((data) => {
+      res.send({ data, message: "Task Created Successfully!" });
+    })
+    .catch((err) => {
+      res.status(500).send({ message: err.message });
+    });
 };
 
 // UPDATE a Todo
 const updateTask = (req, res) => {
   const id = req.params.id;
-  const {title, description} = req.body
+  const { title, description } = req.body;
 
-  Todo.update({title, description}, {
-    where: { id: id, userId: req.userId, archived: false },
-    returning: true,
-  })
+  Todo.update(
+    { title, description },
+    {
+      where: { id: id, userId: req.userId, archived: false },
+      returning: true,
+    }
+  )
     .then((num) => {
       if (num[0] >= 1) {
         res.send({
           data: num[1][0],
-          message: "Task was updated successfully."
+          message: "Task was updated successfully.",
         });
       } else {
         res.status(400).send({
-          message: `Cannot update Task id=${id}. Maybe it was not found or req.body is empty or unchanged!`
+          message: `Cannot update Task id=${id}. Maybe it was not found or req.body is empty or unchanged!`,
         });
       }
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
-        message: "Error updating Task with id=" + id
+        message: "Error updating Task with id=" + id,
       });
     });
 };
@@ -81,50 +84,56 @@ const updateTask = (req, res) => {
 const toggleComplete = (req, res) => {
   const id = req.params.id;
 
-  Todo.update({completed: req.body.completed}, {
-    where: { id: id, userId: req.userId, archived: false },
-    returning: true,
-  })
-    .then(num => {
+  Todo.update(
+    { completed: req.body.completed },
+    {
+      where: { id: id, userId: req.userId, archived: false },
+      returning: true,
+    }
+  )
+    .then((num) => {
       if (num[0] >= 1) {
         res.send({
           data: num[1][0],
-          message: "Task was updated successfully."
+          message: "Task was updated successfully.",
         });
       } else {
         res.status(404).send({
-          message: `Cannot update Task with id=${id}. Maybe it was not found!`
+          message: `Cannot update Task with id=${id}. Maybe it was not found!`,
         });
       }
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
-        message: "Error updating Task with id=" + id
+        message: "Error updating Task with id=" + id,
       });
     });
-}
+};
 
 // DELETE a Todo
 const deleteTask = (req, res) => {
   const id = req.params.id;
 
-  Todo.update({ archived: true },{
-    where: { id: id, userId: req.userId, archived: false }
-  })
-    .then(num => {
+  Todo.update(
+    { archived: true },
+    {
+      where: { id: id, userId: req.userId, archived: false },
+    }
+  )
+    .then((num) => {
       if (num == 1) {
         res.send({
-          message: "Task was deleted successfully!"
+          message: "Task was deleted successfully!",
         });
       } else {
         res.status(400).send({
-          message: `Cannot delete Task with id=${id}. Maybe Task was not found!`
+          message: `Cannot delete Task with id=${id}. Maybe Task was not found!`,
         });
       }
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
-        message: "Could not delete Task with id=" + id
+        message: "Could not delete Task with id=" + id,
       });
     });
 };
@@ -136,4 +145,4 @@ module.exports = {
   findOneTask,
   updateTask,
   toggleComplete,
-}
+};
