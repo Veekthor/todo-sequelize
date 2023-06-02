@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import TodoForm from '../components/TodoForm';
 import TodoItem from '../components/TodoItem';
 import { authApiCall } from '../api';
@@ -6,6 +6,24 @@ import { toast } from 'react-toastify';
 
 const TodoPage = () => {
   const [todos, setTodos] = useState([]);
+
+  useEffect(() => {
+    const fetchUserTodos = async () => {
+      toast.warn("Fetching Tasks!");
+      const {data, error} = await authApiCall({
+        path: "/todos/",
+      })
+      if(data) {
+        setTodos(data.todos);
+        toast.success(data.message);
+      }
+      if(error) {
+        toast.error(error.message || "Something Went Wrong!");
+        console.log("Error Msg: ", error.message)
+      };
+    }
+    fetchUserTodos();
+  },[])
 
   const addTodo = async(todo, cb) => {
     const body = {

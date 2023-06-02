@@ -3,7 +3,8 @@ const { Todo } = require("../models/todo");
 const findAllTasks = (req, res) => {
   Todo.findAll({ where: { userId: req.userId, archived: false } })
     .then(todos => {
-      res.send(todos);
+      const msg = todos.length === 0 ? "No Tasks Found" : "Success";
+      res.send({todos, message: msg});
     })
     .catch(err => {
       res.status(500).send({
