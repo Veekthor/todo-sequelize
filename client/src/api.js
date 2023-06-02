@@ -35,3 +35,17 @@ export const apiCall = async ({
 
   return returnObj;
 };
+
+export const authApiCall = async ({
+  path = "/",
+  method = "GET",
+  body,
+  headers,
+  otherOptions = {},
+}) => {
+  headers = {
+    "x-access-token": localStorage.getItem("token"),
+    ...headers,
+  }
+  return await apiCall({path, method, body, otherOptions, headers});
+}
