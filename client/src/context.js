@@ -1,7 +1,10 @@
 import { createContext, useState } from "react";
 import { parseJwt } from "./utils";
 
-export const authContext = createContext(null);
+export const authContext = createContext({
+  user: null,
+  setUser: () => {},
+});
 
 export const AuthContextProvider = ({ children }) => {
   const token = localStorage.getItem("token");

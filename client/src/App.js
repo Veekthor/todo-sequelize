@@ -6,6 +6,7 @@ import {ToastContainer} from "react-toastify";
 import UserPage from "./pages/UserPage";
 import { AuthContextProvider } from "./context";
 import 'react-toastify/dist/ReactToastify.css';
+import Protected from "./components/Protected";
 
 function App() {
   return (
@@ -14,7 +15,7 @@ function App() {
         <GlobalStyles />
         <AuthContextProvider>
           <Routes>
-            <Route path="/" element={<TodoPage />} />
+            <Route path="/" element={<Protected><TodoPage /></Protected>}/>
             <Route path="/login" element={<UserPage />} />
             <Route path="/signup" element={<UserPage isSignUp />} />
           </Routes>
