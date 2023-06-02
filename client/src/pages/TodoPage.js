@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import TodoForm from '../components/TodoForm';
 import TodoItem from '../components/TodoItem';
 import { authApiCall } from '../api';
+import { toast } from 'react-toastify';
 
 const TodoPage = () => {
   const [todos, setTodos] = useState([]);
@@ -10,6 +11,7 @@ const TodoPage = () => {
     const body = {
       ...todo,
     }
+    toast.warn("Creating Task!");
     const {data, error} = await authApiCall({
       path: "/todos/create",
       method: "POST",
@@ -18,9 +20,12 @@ const TodoPage = () => {
     if(cb) cb(!!data);
     if(data) {
       setTodos([data.data, ...todos]);
-      // Show alerts data.message holds message
+      toast.success(data.message);
     }
-    if(error) console.log("Error Msg: ", error.message);
+    if(error) {
+      toast.error(error.message || "Something Went Wrong!");
+      console.log("Error Msg: ", error.message)
+    };
   }
 
   const markComplete = (id, original = null) => {
@@ -34,6 +39,7 @@ const TodoPage = () => {
   }
   const toggleComplete = async (id, originalState, cb) => {
     markComplete(id);
+    toast.warn("Marking Task Complete!");
     const {data, error} = await authApiCall({
       path: `/todos/toggleComplete/${id}`,
       method: "POST",
@@ -43,10 +49,11 @@ const TodoPage = () => {
     })
     if(cb) cb(!!data);
     if(data) {
-      // Show alerts data.message holds message
+      toast.success(data.message);
     }
     if(error) {
       markComplete(id, originalState);
+      toast.error(error.message || "Something Went Wrong!");
       console.log("Error Msg: ", error.message)
     };
   }
@@ -56,6 +63,7 @@ const TodoPage = () => {
       title: newTodo.title,
       description: newTodo.description || "",
     }
+    toast.warn("Updating Task!");
     const {data, error} = await authApiCall({
       path: `/todos/${id}`,
       method: "PUT",
@@ -63,7 +71,7 @@ const TodoPage = () => {
     });
     if(cb) cb(!!data);
     if(data) {
-      // Show alerts data.message holds message
+      toast.success(data.message);
       setTodos(todos.map(todo => {
         if (todo.id === id) {
           return data.data;
@@ -72,21 +80,25 @@ const TodoPage = () => {
       }));
     }
     if(error) {
+      toast.error(error.message || "Something Went Wrong!");
       console.log("Error Msg: ", error.message)
     };
   }
 
   const deleteTodo = async (id, cb) => {
+    toast.warn("Deleting Task!");
     const {data, error} = await authApiCall({
       path: `/todos/${id}`,
       method: "DELETE",
     });
     if(cb) cb(!!data);
     if(data) {
+      toast.success(data.message);
       // Show alerts data.message holds message
       setTodos(todos.filter(todo => todo.id !== id));
     }
     if(error) {
+      toast.error(error.message || "Something Went Wrong!");
       console.log("Error Msg: ", error.message)
     };
   }
