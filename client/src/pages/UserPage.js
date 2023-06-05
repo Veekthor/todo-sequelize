@@ -7,6 +7,7 @@ import { BsFillGearFill } from "react-icons/bs";
 import { apiCall } from "../api";
 import { parseJwt } from "../utils";
 import { toast } from "react-toastify";
+import { UserForm } from "../components/styles/UserPage.styled";
 
 const UserPage = ({ isSignUp }) => {
   const [userName, setUserName] = useState("");
@@ -58,15 +59,16 @@ const UserPage = ({ isSignUp }) => {
     : "Choose a password";
 
   return (
-    <form onSubmit={handleSubmit}>
+    <UserForm onSubmit={handleSubmit}>
       <TextInputField
-        label="User Name"
+        label="Username"
         type="userName"
         name="userName"
         id="userName"
         placeholder="User Name"
         value={userName}
         onChange={handleChange}
+        isUserPage
         required
       />
 
@@ -77,6 +79,7 @@ const UserPage = ({ isSignUp }) => {
         placeholder={passwordPlaceHolder}
         value={password}
         onChange={handleChange}
+        isUserPage
         required
       />
       <ButtonContainer>
@@ -85,7 +88,7 @@ const UserPage = ({ isSignUp }) => {
         </Button>
         <Link to={linkHref}>{linkText}</Link>
       </ButtonContainer>
-    </form>
+    </UserForm>
   );
 };
 
